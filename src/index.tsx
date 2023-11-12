@@ -7,6 +7,8 @@ import { ConfigProvider } from 'antd';
 import enUS from 'antd/lib/locale/en_US';
 import theme from './theme';
 import GlobalStyles from './GlobalStyles';
+import Layout from './components/Layout';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,7 +18,14 @@ root.render(
     <ThemeProvider theme={theme}>
       <ConfigProvider locale={enUS}>
         <GlobalStyles />
-        <App />
+        <Router>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<App />} />
+              <Route path="*" element={<App />} />
+            </Route>
+          </Routes>
+        </Router>
       </ConfigProvider>
     </ThemeProvider>
   </React.StrictMode>
