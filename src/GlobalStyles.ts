@@ -13,6 +13,7 @@ const GlobalStyle = createGlobalStyle`
 
    div,
    span,
+   label,
    h1,
    h2,
    h3,
@@ -27,6 +28,10 @@ const GlobalStyle = createGlobalStyle`
      font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
        monospace;
    }
+
+   /* .element-steps .ant-steps-item {
+     width: 50%;
+   } */
  `}
 `;
 

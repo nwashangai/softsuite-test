@@ -61,6 +61,7 @@ export const StyledHeader = styled(Header)`
 export const StyledContent = styled(Content)`
   > * {
     margin-left: 5%;
+    margin-right: 5%;
   }
 `;
 

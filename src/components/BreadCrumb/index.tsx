@@ -6,6 +6,8 @@ type Props = {
   path: string;
 };
 
+const defaultPath = 'payrole-management/element-setup/element';
+
 type ColumnType = {
   title: string;
   href: string;
@@ -30,7 +32,7 @@ const generateCrumb = (columnList: Array<keyof typeof columns>) => {
 };
 
 function BreadCrumb({ path }: Props) {
-  const columnList = path
+  const columnList = defaultPath
     .split('/')
     .filter(Boolean) as (keyof typeof columns)[];
   const crumbs = generateCrumb(columnList);

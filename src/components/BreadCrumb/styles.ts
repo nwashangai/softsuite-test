@@ -7,6 +7,8 @@ export const StyledBreadCrumb = styled(Breadcrumb)`
   li:last-child > a {
     color: ${({ theme }) => theme.textColor};
   }
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 export const CrumbItem = styled(Item)`
