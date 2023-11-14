@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { ElementContainer, Title } from './styles';
 import Tableheader from '../../components/TableHeader';
-import { Form, Modal } from 'antd';
+import { Modal } from 'antd';
 import { useSelector } from 'react-redux';
-import { ElementState } from '../../slices/types';
+import { ElementState, Mode } from '../../slices/types';
 import { RootState } from '../../store';
 import ElementForm from '../../components/ElementForm';
+import { Form } from '../../styles';
+
+const modalTitle = {
+  [Mode.create]: 'Create Element',
+  [Mode.edit]: 'Edit Element',
+};
 
 function Element() {
   const [isModalVisible, toggleModal] = useState<boolean>(false);
@@ -23,19 +29,14 @@ function Element() {
         <Tableheader toggleModal={toggleModal} />
       </ElementContainer>
       <Modal
-        title="Create Element"
+        title={modalTitle[element.mode]}
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
         width="100%"
         style={{ maxWidth: '700px' }}
       >
-        <ElementForm
-          formData={form}
-          initialValues={element}
-          createElement={() => null}
-          handleCancel={handleCancel}
-        />
+        <ElementForm formData={form} handleCancel={handleCancel} />
       </Modal>
     </>
   );

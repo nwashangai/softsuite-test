@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
+import React, { memo } from 'react';
 import { FormFooter, Line, StepsWrapper, WizardWrapper } from './styles';
 import Step from './Step';
 import Button from '../Button';
-import { Form, FormInstance } from 'antd';
+import { FormInstance } from 'antd';
+import useValidate from '../../hooks/useValidate';
+import { useDispatch } from 'react-redux';
+import { updateElement } from '../../slices/elementSlice';
 
 type Props = {
-  steps: Array<{ title: string; content: JSX.Element }>;
-  FormItem: typeof Form.Item;
+  steps: Array<{ title: string; content: JSX.Element; fields?: Array<string> }>;
   form: FormInstance<any>;
+  currentTab: number;
+  setCurrentTab: (tab: number) => void;
+  name?: string;
   handleCancel: () => void;
+  loading?: boolean;
 };
 
-function FormWizard({ steps, FormItem, form, handleCancel }: Props) {
-  const [currentTab, setCurrentTab] = useState<number>(0);
+function FormWizard({
+  steps,
+  form,
+  name,
+  currentTab,
+  loading,
+  setCurrentTab,
+  handleCancel,
+}: Props) {
+  const dispatch = useDispatch();
+  const hasMoreTabs = Boolean(steps.length - (currentTab + 1));
+  const canGoToNext = useValidate(steps[currentTab]?.fields || [], name);
 
   const handleBackBtn = () => {
     if (!currentTab) {
@@ -23,7 +39,10 @@ function FormWizard({ steps, FormItem, form, handleCancel }: Props) {
   };
 
   const handleNextBtn = () => {
-    if (steps.length - currentTab) {
+    if (hasMoreTabs) {
+      dispatch(
+        updateElement(form.getFieldsValue(steps[currentTab]?.fields || []))
+      );
       setCurrentTab(currentTab + 1);
     }
   };
@@ -48,14 +67,16 @@ function FormWizard({ steps, FormItem, form, handleCancel }: Props) {
         </Button>
         <Button
           width="48%"
-          htmlType={steps.length - currentTab ? 'button' : 'submit'}
+          htmlType={hasMoreTabs ? 'button' : 'submit'}
           onClick={handleNextBtn}
+          disabled={hasMoreTabs && !canGoToNext}
+          loading={loading}
         >
-          {steps.length - currentTab ? 'Next' : 'Create Element'}
+          {hasMoreTabs ? 'Next' : 'Create Element'}
         </Button>
       </FormFooter>
     </WizardWrapper>
   );
 }
 
-export default FormWizard;
+export default memo(FormWizard);

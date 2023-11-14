@@ -1,12 +1,12 @@
 export interface ElementState {
   name: string;
   description: string;
-  payRunId: number;
-  payRunValueId: number;
-  classificationId: number;
-  classificationValueId: number;
-  categoryId: number;
-  categoryValueId: number;
+  payRunId?: string;
+  payRunValueId?: string;
+  classificationId?: string;
+  classificationValueId?: string;
+  categoryId?: string;
+  categoryValueId?: string;
   reportingName: string;
   processingType: string;
   status: string;
@@ -15,4 +15,18 @@ export interface ElementState {
   effectiveEndDate: string;
   selectedMonths: string[];
   payFrequency: string;
+  classificationValues: Array<DropdownType>;
+  categoryValues: Array<DropdownType>;
+  payValues: Array<DropdownType>;
 }
+
+export enum Mode {
+  create = 'create',
+  edit = 'edit',
+}
+
+type DropdownType = {
+  value: string;
+  label: string;
+  disabled?: boolean;
+};

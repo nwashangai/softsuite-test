@@ -11,8 +11,6 @@ interface CustomButtonProps extends ButtonProps {
 }
 
 function Button({ children, icon, gap, ...props }: CustomButtonProps) {
-  console.log(props);
-
   return (
     <StyledButton {...props}>
       {children && <span>{children}</span>}

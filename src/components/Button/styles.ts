@@ -29,4 +29,10 @@ export const StyledButton = styled(Button)<BtnProps>`
     background-color: ${({ theme, isInverted }) =>
       isInverted ? theme.white : theme.primaryColor};
   }
+
+  &:disabled {
+    background-color: ${({ theme, isInverted }) =>
+      isInverted ? theme.white : theme.primaryColor};
+    opacity: 0.4;
+  }
 `;
