@@ -1,11 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ElementState, Mode } from './types';
-import { AppThunk } from '../store';
+import { AppDispatch, AppThunk } from '../store';
 import { request } from '../utilities/request';
-import {
-  extractLookupIds,
-  extractLookupValues,
-} from '../utilities/extractLookups';
+import { extractLookupIds } from '../utilities/extractLookups';
+import { getLookupValues } from '../utilities/loadDependencyData';
 
 const initialState: { mode: Mode; value: ElementState; isLoading: boolean } = {
   mode: Mode.create,
@@ -14,7 +12,7 @@ const initialState: { mode: Mode; value: ElementState; isLoading: boolean } = {
     description: '',
     reportingName: '',
     processingType: '',
-    status: 'not active',
+    status: 'inactive',
     prorate: '',
     effectiveStartDate: '',
     effectiveEndDate: '',
@@ -32,7 +30,10 @@ const resetValues: Partial<ElementState> = {
   description: '',
   reportingName: '',
   processingType: '',
-  status: 'not active',
+  payRunValueId: undefined,
+  categoryValueId: undefined,
+  classificationValueId: undefined,
+  status: 'inactive',
   prorate: '',
   effectiveStartDate: '',
   effectiveEndDate: '',
@@ -54,12 +55,11 @@ const elementSlice = createSlice({
       state.isLoading = false;
     },
     resetElement: (state) => {
-      return {
-        ...state,
-        value: { ...state.value, ...resetValues },
-        mode: Mode.create,
-        isLoading: false,
-      };
+      state.value = { ...state.value, ...resetValues };
+      state.isLoading = false;
+    },
+    createMode: (state) => {
+      state.mode = Mode.create;
     },
     toggleLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action?.payload || false;
@@ -74,29 +74,24 @@ export const fetchInitalDataAsync = (): AppThunk => async (dispatch) => {
     );
     const structuredData = extractLookupIds(response.data);
     dispatch(updateElement(structuredData));
-    const [classificationValues, categoryValues, payValues] = await Promise.all(
-      [
-        request(
-          `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${structuredData.classificationId}/lookupvalues`
-        ),
-        request(
-          `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${structuredData.categoryId}/lookupvalues`
-        ),
-        request(
-          `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${structuredData.payRunId}/lookupvalues`
-        ),
-      ]
-    );
-    dispatch(
-      updateElement({
-        classificationValues: extractLookupValues(classificationValues),
-        categoryValues: extractLookupValues(categoryValues),
-        payValues: extractLookupValues(payValues),
-      })
-    );
+    getLookupValues(structuredData, dispatch as AppDispatch);
   } catch (error) {}
 };
 
-export const { editElement, resetElement, updateElement, toggleLoading } =
-  elementSlice.actions;
+export const setEditMode =
+  (payload: Partial<ElementState>): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(editElement(payload));
+      getLookupValues(payload, dispatch as AppDispatch);
+    } catch (error) {}
+  };
+
+export const {
+  editElement,
+  resetElement,
+  updateElement,
+  toggleLoading,
+  createMode,
+} = elementSlice.actions;
 export default elementSlice.reducer;

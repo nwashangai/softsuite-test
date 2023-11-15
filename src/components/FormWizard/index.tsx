@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { FormFooter, Line, StepsWrapper, WizardWrapper } from './styles';
 import Step from './Step';
 import Button from '../Button';
@@ -27,7 +27,11 @@ function FormWizard({
   handleCancel,
 }: Props) {
   const dispatch = useDispatch();
-  const hasMoreTabs = Boolean(steps.length - (currentTab + 1));
+  const hasMoreTabs = useMemo(
+    () => Boolean(steps.length - (currentTab + 1)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentTab]
+  );
   const canGoToNext = useValidate(steps[currentTab]?.fields || [], name);
 
   const handleBackBtn = () => {
@@ -44,6 +48,8 @@ function FormWizard({
         updateElement(form.getFieldsValue(steps[currentTab]?.fields || []))
       );
       setCurrentTab(currentTab + 1);
+    } else {
+      form.submit();
     }
   };
 
@@ -67,7 +73,6 @@ function FormWizard({
         </Button>
         <Button
           width="48%"
-          htmlType={hasMoreTabs ? 'button' : 'submit'}
           onClick={handleNextBtn}
           disabled={hasMoreTabs && !canGoToNext}
           loading={loading}

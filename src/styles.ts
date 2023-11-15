@@ -6,6 +6,8 @@ import {
   Switch,
   Form as AntForm,
   Radio,
+  Table as AntTable,
+  Dropdown as AntDropdown,
 } from 'antd';
 
 export const InputText = styled(Input)`
@@ -111,4 +113,56 @@ export const DualFormContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   gap: 15px;
+`;
+
+export const Table = styled(AntTable)`
+  margin-top: 20px;
+  .ant-pagination .ant-pagination-next .ant-pagination-item-link,
+  .ant-pagination .ant-pagination-item {
+    background-color: ${({ theme }) => theme.grayBg};
+
+    a {
+      color: ${({ theme }) => theme.grayText};
+    }
+  }
+
+  .ant-pagination .ant-pagination-item-active {
+    background-color: ${({ theme }) => theme.secondaryColor};
+    border-width: 0;
+
+    a {
+      color: ${({ theme }) => theme.white};
+    }
+  }
+
+  .ant-table-thead .ant-table-cell {
+    background-color: ${({ theme }) => theme.secondaryColor};
+  }
+
+  &&&& {
+    .ant-table-cell {
+      color: ${({ theme }) => theme.white};
+      font-weight: 400;
+    }
+
+    .ant-table-header {
+      border-radius: 0;
+    }
+
+    .ant-table-cell {
+      border-start-start-radius: 0;
+    }
+
+    .ant-table-cell {
+      border-start-end-radius: 0;
+    }
+  }
+`;
+
+export const Dropdown = styled(AntDropdown)``;
+
+export const ActionItems = styled.div`
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
 `;

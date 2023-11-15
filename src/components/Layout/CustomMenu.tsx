@@ -36,16 +36,11 @@ const CustomMenu = () => {
     ]),
   ];
 
-  const onMenuChange = (item: any) => {
-    console.log(item);
-  };
-
   return (
     <StyledMenu
       defaultSelectedKeys={['element']}
       defaultOpenKeys={['element-setup']}
       mode="inline"
-      onSelect={onMenuChange}
       items={menuItems}
     />
   );

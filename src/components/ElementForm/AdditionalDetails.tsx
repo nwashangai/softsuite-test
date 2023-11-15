@@ -24,7 +24,7 @@ function AdditionalDetails({ FormItem }: Props) {
   const element = useSelector((state: RootState) => state.element.value);
 
   const isSelectedMonthDisabled = useMemo(() => {
-    if (element.payFrequency === 'Monthly') {
+    if (element.payFrequency === 'monthly') {
       return true;
     }
 
@@ -76,6 +76,7 @@ function AdditionalDetails({ FormItem }: Props) {
         <FormItem
           label="Processing Type"
           name="processingType"
+          initialValue={element.processingType}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
@@ -86,13 +87,14 @@ function AdditionalDetails({ FormItem }: Props) {
         >
           <RadioGroup>
             <RadioInput value={'open'}>Open</RadioInput>
-            <RadioInput value={'close'}>Close</RadioInput>
+            <RadioInput value={'closed'}>Closed</RadioInput>
           </RadioGroup>
         </FormItem>
 
         <FormItem
           label="Pay Frequency"
           name="payFrequency"
+          initialValue={element.payFrequency}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
@@ -106,14 +108,15 @@ function AdditionalDetails({ FormItem }: Props) {
               dispatch(updateElement({ payFrequency: event.target.value }))
             }
           >
-            <RadioInput value={'Monthly'}>Monthly</RadioInput>
-            <RadioInput value={'Selected Month'}>Selected Month</RadioInput>
+            <RadioInput value={'monthly'}>Monthly</RadioInput>
+            <RadioInput value={'selectedMonths'}>Selected Month</RadioInput>
           </RadioGroup>
         </FormItem>
       </DualFormContainer>
       <FormItem
         label="Select Per Months"
         name="selectedMonths"
+        initialValue={element.selectedMonths}
         wrapperCol={{ span: 24, offset: 0 }}
         rules={[
           {
@@ -139,6 +142,7 @@ function AdditionalDetails({ FormItem }: Props) {
         <FormItem
           label="Prorate"
           name="prorate"
+          initialValue={element.prorate}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
@@ -148,8 +152,8 @@ function AdditionalDetails({ FormItem }: Props) {
           ]}
         >
           <RadioGroup>
-            <RadioInput value={'Yes'}>Yes</RadioInput>
-            <RadioInput value={'No'}>No</RadioInput>
+            <RadioInput value={'yes'}>Yes</RadioInput>
+            <RadioInput value={'no'}>No</RadioInput>
           </RadioGroup>
         </FormItem>
 
@@ -163,7 +167,7 @@ function AdditionalDetails({ FormItem }: Props) {
               defaultChecked={element.status === 'active'}
               onChange={(isActive) =>
                 dispatch(
-                  updateElement({ status: isActive ? 'active' : 'not active' })
+                  updateElement({ status: isActive ? 'active' : 'inactive' })
                 )
               }
             />{' '}

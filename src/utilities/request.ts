@@ -6,7 +6,11 @@ type TOption = {
   body?: BodyInit;
 };
 
-export async function request(url: string, method = 'GET', data = null) {
+export async function request(
+  url: string,
+  method = 'GET',
+  data: { [key: string]: any } | null = null
+) {
   try {
     const options: TOption = {
       method,

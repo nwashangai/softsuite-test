@@ -29,9 +29,9 @@ const GlobalStyle = createGlobalStyle`
        monospace;
    }
 
-   /* .element-steps .ant-steps-item {
-     width: 50%;
-   } */
+   .element-action > ul > li:last-child span {
+     color: ${({ theme }) => theme.danger};
+   }
  `}
 `;
 

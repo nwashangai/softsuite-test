@@ -1,11 +1,12 @@
 import { Action, configureStore } from '@reduxjs/toolkit';
 import elementSlice from './slices/elementSlice';
+import allElementsSlice from './slices/allElementsSlice';
 import thunk, { ThunkAction } from 'redux-thunk';
 
 const store = configureStore({
   reducer: {
     element: elementSlice,
-    // Add more reducers if needed
+    allElements: allElementsSlice,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });

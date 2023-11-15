@@ -1,4 +1,5 @@
 export interface ElementState {
+  id?: string;
   name: string;
   description: string;
   payRunId?: string;
@@ -25,7 +26,7 @@ export enum Mode {
   edit = 'edit',
 }
 
-type DropdownType = {
+export type DropdownType = {
   value: string;
   label: string;
   disabled?: boolean;

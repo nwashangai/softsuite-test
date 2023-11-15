@@ -21,7 +21,7 @@ function ElementDetails({ FormItem }: Props) {
 
   const category = useMemo(() => {
     const classificatioValue = element.classificationValues.find(
-      (item) => item.value === element.classificationId
+      (item) => item.value === element.classificationValueId
     );
 
     if (classificatioValue?.label.toLowerCase() === 'deduction') {
@@ -36,9 +36,7 @@ function ElementDetails({ FormItem }: Props) {
 
     return element.categoryValues;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [element.classificationId, element.classificationValues]);
-
-  console.log();
+  }, [element.classificationValueId, element.classificationValues]);
 
   return (
     <ElementFormWrapper>
@@ -61,7 +59,7 @@ function ElementDetails({ FormItem }: Props) {
         <FormItem
           label="Element Classification"
           name="classificationValueId"
-          initialValue={element.classificationValueId}
+          initialValue={element.classificationValueId?.toString()}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
@@ -74,7 +72,9 @@ function ElementDetails({ FormItem }: Props) {
             placeholder="Select Classification"
             options={element.classificationValues}
             onChange={(value) =>
-              dispatch(updateElement({ classificationId: value as string }))
+              dispatch(
+                updateElement({ classificationValueId: value as string })
+              )
             }
           />
         </FormItem>
@@ -83,7 +83,7 @@ function ElementDetails({ FormItem }: Props) {
         <FormItem
           label="Element Category"
           name="categoryValueId"
-          initialValue={element.categoryValueId}
+          initialValue={element.categoryValueId?.toString()}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
@@ -101,7 +101,7 @@ function ElementDetails({ FormItem }: Props) {
         <FormItem
           label="Payrun"
           name="payRunValueId"
-          initialValue={element.payRunValueId}
+          initialValue={element.payRunValueId?.toString()}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
