@@ -30,6 +30,7 @@ import moment from 'moment';
 const modalTitle = {
   [Mode.create]: 'Create Element',
   [Mode.edit]: 'Edit Element',
+  [Mode.view]: 'Element Detail',
 };
 
 function Element() {
@@ -38,9 +39,7 @@ function Element() {
   const loading = useSelector(
     (state: RootState) => state.allElements.isLoading
   );
-  const lookupCache = useSelector(
-    (state: RootState) => state.allElements.lookUpCache
-  );
+  const lookupCache = useSelector((state: RootState) => state.lookup);
   const allElements = useSelector(
     (state: RootState) => state.allElements.value
   );
@@ -83,9 +82,7 @@ function Element() {
           <ActionItems>
             <EyeOutlined />
             <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.antgroup.com"
+              href={`/payrole-management/element-setup/element/${record.id}/link`}
             >
               View Element Links
             </a>
@@ -126,8 +123,9 @@ function Element() {
       key: 'categoryValueId',
       render: (id, record) => (
         <div>
-          {lookupCache[`category-${record.categoryId}:value-${id}`] ||
-            'loading...'}
+          {lookupCache.elementCategoryValues.find(
+            (option) => Number(option.value) === id
+          )?.label || 'loading...'}
         </div>
       ),
     },
@@ -137,8 +135,9 @@ function Element() {
       dataIndex: 'classificationValueId',
       render: (id, record) => (
         <div>
-          {lookupCache[`class-${record.classificationId}:value-${id}`] ||
-            'loading...'}
+          {lookupCache.elementClassificationValues.find(
+            (option) => Number(option.value) === id
+          )?.label || 'loading...'}
         </div>
       ),
     },
@@ -219,7 +218,7 @@ function Element() {
     <>
       <ElementContainer>
         <Title level={3}>Element</Title>
-        <Tableheader toggleModal={toggleModal} />
+        <Tableheader buttonText="Create Element" toggleModal={toggleModal} />
         <Table
           columns={columns}
           sticky

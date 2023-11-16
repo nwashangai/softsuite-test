@@ -1,9 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ElementState, Mode } from './types';
-import { AppDispatch, AppThunk } from '../store';
+import { AppThunk } from '../store';
 import { request } from '../utilities/request';
-import { extractLookupIds } from '../utilities/extractLookups';
-import { getLookupValues } from '../utilities/loadDependencyData';
 
 const initialState: { mode: Mode; value: ElementState; isLoading: boolean } = {
   mode: Mode.create,
@@ -18,9 +16,6 @@ const initialState: { mode: Mode; value: ElementState; isLoading: boolean } = {
     effectiveEndDate: '',
     selectedMonths: [],
     payFrequency: '',
-    classificationValues: [{ value: '', label: 'Loading...', disabled: true }],
-    categoryValues: [{ value: '', label: 'Loading...', disabled: true }],
-    payValues: [{ value: '', label: 'Loading...', disabled: true }],
   },
   isLoading: false,
 };
@@ -67,23 +62,22 @@ const elementSlice = createSlice({
   },
 });
 
-export const fetchInitalDataAsync = (): AppThunk => async (dispatch) => {
-  try {
-    const response = await request(
-      'https://650af6bedfd73d1fab094cf7.mockapi.io/lookups'
-    );
-    const structuredData = extractLookupIds(response.data);
-    dispatch(updateElement(structuredData));
-    getLookupValues(structuredData, dispatch as AppDispatch);
-  } catch (error) {}
-};
+export const fetchElementById =
+  (id: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const element = await request(
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${id}`
+      );
+      dispatch(updateElement({ ...element.data }));
+    } catch (error) {}
+  };
 
 export const setEditMode =
   (payload: Partial<ElementState>): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(editElement(payload));
-      getLookupValues(payload, dispatch as AppDispatch);
     } catch (error) {}
   };
 

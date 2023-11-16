@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FormInstance, message } from 'antd';
 import FormWizard from '../FormWizard';
 import { Form, FormItem } from '../../styles';
@@ -9,8 +9,7 @@ import AdditionalDetails from './AdditionalDetails';
 import { ElementState, Mode } from '../../slices/types';
 import eventBus from '../../utilities/eventBus';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchInitalDataAsync, toggleLoading } from '../../slices/elementSlice';
-import { AnyAction } from 'redux';
+import { toggleLoading } from '../../slices/elementSlice';
 import { RootState } from '../../store';
 import moment from 'moment';
 import { request } from '../../utilities/request';
@@ -27,11 +26,6 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
   const loading = useSelector((state: RootState) => state.element.isLoading);
   const mode = useSelector((state: RootState) => state.element.mode);
   const [currentTab, setCurrentTab] = useState<number>(0);
-
-  useEffect(() => {
-    // Dispatch the Thunk action when the component mounts
-    dispatch(fetchInitalDataAsync() as unknown as AnyAction);
-  }, []);
 
   const itemList = useMemo(
     () => [

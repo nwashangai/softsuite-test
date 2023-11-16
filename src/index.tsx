@@ -11,29 +11,41 @@ import GlobalStyles from './GlobalStyles';
 import Layout from './components/Layout';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Element from './pages/element';
+import ElementLink from './pages/elementLink';
+import AppProvider from './providers/AppProvider';
 import store from './store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <ConfigProvider locale={enUS}>
-        <Provider store={store}>
-          <GlobalStyles />
+  // <React.StrictMode>
+  <ThemeProvider theme={theme}>
+    <ConfigProvider locale={enUS}>
+      <Provider store={store}>
+        <GlobalStyles />
+        <AppProvider>
           <Router>
             <Routes>
               <Route path="/" element={<Layout />}>
-                <Route index element={<Element />} />
+                <Route index element={<App />} />
+                <Route
+                  path="/payrole-management/element-setup/element"
+                  element={<Element />}
+                />
+                <Route
+                  path="/payrole-management/element-setup/element/:elementId/link"
+                  element={<ElementLink />}
+                />
                 <Route path="*" element={<App />} />
               </Route>
             </Routes>
           </Router>
-        </Provider>
-      </ConfigProvider>
-    </ThemeProvider>
-  </React.StrictMode>
+        </AppProvider>
+      </Provider>
+    </ConfigProvider>
+  </ThemeProvider>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

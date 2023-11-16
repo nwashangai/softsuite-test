@@ -10,6 +10,7 @@ const theme = {
   white: '#fff',
   danger: '#f54040',
   background: '#f5f5f5',
+  grayShade1: '#7E7E7E',
 };
 
 export default theme;

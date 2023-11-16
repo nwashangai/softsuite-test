@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import RequestCache from './RequestCache';
 
 type TOption = {
   method: string;
@@ -6,18 +7,25 @@ type TOption = {
   body?: BodyInit;
 };
 
+const requestCache = RequestCache.getInstance();
+
 export async function request(
   url: string,
   method = 'GET',
   data: { [key: string]: any } | null = null
 ) {
   try {
+    const cachedData = requestCache.get(url);
     const options: TOption = {
       method,
       headers: {
         'Content-Type': 'application/json',
       },
     };
+
+    if (method.toUpperCase() === 'GET' && cachedData) {
+      return cachedData;
+    }
 
     if (data) {
       options.body = JSON.stringify(data);
@@ -30,6 +38,10 @@ export async function request(
     }
 
     const responseData = await response.json();
+
+    if (method.toUpperCase() === 'GET') {
+      requestCache.set(url, responseData);
+    }
     return responseData;
   } catch (error: any) {
     message.error(error.message);

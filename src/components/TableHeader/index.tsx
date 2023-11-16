@@ -9,9 +9,10 @@ import { createMode } from '../../slices/elementSlice';
 
 type Props = {
   toggleModal: (isVisible: boolean) => void;
+  buttonText: string;
 };
 
-function Tableheader({ toggleModal }: Props) {
+function Tableheader({ toggleModal, buttonText }: Props) {
   const dispatch = useDispatch();
   const handleCreateNewElement = () => {
     dispatch(createMode());
@@ -29,7 +30,7 @@ function Tableheader({ toggleModal }: Props) {
         <Image src="/img/filter.svg" alt="filter" />
       </SearchWrapper>
       <Button onClick={handleCreateNewElement}>
-        Create Element{' '}
+        {buttonText}{' '}
         <Space>
           <PlusOutlined />
         </Space>

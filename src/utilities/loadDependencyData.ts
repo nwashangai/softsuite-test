@@ -1,65 +1,107 @@
-import { updateCache } from '../slices/allElementsSlice';
-import { ElementState } from '../slices/types';
+import { updateCache } from '../slices/lookupSlice';
+import { DropdownType, LookupValuesType } from '../slices/types';
 import { request } from './request';
-import { updateElement } from '../slices/elementSlice';
 import { extractLookupValues } from './extractLookups';
 import { AppDispatch } from '../store';
+import { setLookupValues } from '../slices/lookupSlice';
+
+type LooupCacheType = {
+  lookupIdKey: string;
+  valueIdKey: string;
+};
 
 export const loadDependencyData = async (
-  data: ElementState[],
-  dispatch: any
+  data: any[],
+  columns: LooupCacheType[],
+  dispatch: any,
+  defaultCache: {
+    [key: string]: any;
+  }
 ) => {
-  const cache: string[] = [];
+  const cache: string[] = Object.keys(defaultCache);
   for (let i = 0; i < data.length; i++) {
-    const categoryKey = `category-${data[i].categoryId}:value-${data[i].categoryValueId}`;
-    const classificationKey = `class-${data[i].classificationId}:value-${data[i].classificationValueId}`;
+    for (const item of columns) {
+      const key = `${item.lookupIdKey}-${data[i][item.lookupIdKey]}:value-${
+        data[i][item.valueIdKey]
+      }`;
 
-    if (!cache.includes(categoryKey)) {
-      try {
-        const response = await request(
-          `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${data[i].categoryId}/lookupvalues/${data[i].categoryValueId}`
-        );
-        dispatch(updateCache({ key: categoryKey, value: response.name }));
-        cache.push(categoryKey);
-      } catch (error) {}
-    }
-
-    if (!cache.includes(classificationKey)) {
-      try {
-        const response = await request(
-          `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${data[i].classificationId}/lookupvalues/${data[i].classificationValueId}`
-        );
-        dispatch(updateCache({ key: classificationKey, value: response.name }));
-        cache.push(classificationKey);
-      } catch (error) {}
+      if (!cache.includes(key)) {
+        try {
+          const response = await request(
+            `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${
+              data[i][item.lookupIdKey]
+            }/lookupvalues/${data[i][item.valueIdKey]}`
+          );
+          dispatch(updateCache({ key, value: response.name }));
+          cache.push(key);
+        } catch (error) {}
+      }
     }
   }
 };
 
+function convertToValueFormat(inputString: string) {
+  const words = inputString.split(' ');
+  const camelCaseWords = words.map((word, index) => {
+    if (index === 0) {
+      return word.toLowerCase();
+    }
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+  });
+
+  return camelCaseWords.join('') + 'Values';
+}
+
+const loadDepartments = async (data: LookupValuesType[]) => {
+  try {
+    const asyncCalls = data.map((item) =>
+      request(
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/suborganizations/${item.id}/departments`
+      )
+    );
+    const batchResponse = await Promise.all(asyncCalls);
+    const flatData = batchResponse.reduce(
+      (prev, current) => [...prev, ...current.data],
+      []
+    );
+    const departments = extractLookupValues(flatData);
+    return departments;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 export const getLookupValues = async (
-  { classificationId, categoryId, payRunId }: Partial<ElementState>,
+  lookup: LookupValuesType[],
   dispatch: AppDispatch
 ) => {
+  const dataObj: { [key: string]: DropdownType[] } = {};
   try {
-    const [classificationValues, categoryValues, payValues] = await Promise.all(
-      [
-        request(
-          `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${classificationId}/lookupvalues`
-        ),
-        request(
-          `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${categoryId}/lookupvalues`
-        ),
-        request(
-          `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${payRunId}/lookupvalues`
-        ),
-      ]
+    const asyncCalls = lookup.map((lookupItem) =>
+      request(
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${lookupItem.id}/lookupvalues`
+      )
     );
-    dispatch(
-      updateElement({
-        classificationValues: extractLookupValues(classificationValues),
-        categoryValues: extractLookupValues(categoryValues),
-        payValues: extractLookupValues(payValues),
-      })
+    asyncCalls.push(
+      request('https://650af6bedfd73d1fab094cf7.mockapi.io/suborganizations')
     );
-  } catch (error) {}
+    const batchResponse = await Promise.all(asyncCalls);
+    lookup.forEach((item, index) => {
+      dataObj[convertToValueFormat(item.name)] = extractLookupValues(
+        batchResponse[index]
+      );
+    });
+    dataObj['subOrginazationValues'] = extractLookupValues(
+      batchResponse[batchResponse.length - 1].data
+    );
+
+    dataObj['departmentvalues'] = await loadDepartments(
+      batchResponse[batchResponse.length - 1].data
+    );
+
+    dispatch(setLookupValues(dataObj));
+  } catch (error: any) {
+    console.error(error);
+  }
 };

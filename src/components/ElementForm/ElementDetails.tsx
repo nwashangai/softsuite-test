@@ -18,25 +18,26 @@ type Props = {
 function ElementDetails({ FormItem }: Props) {
   const dispatch = useDispatch();
   const element = useSelector((state: RootState) => state.element.value);
+  const lookup = useSelector((state: RootState) => state.lookup);
 
   const category = useMemo(() => {
-    const classificatioValue = element.classificationValues.find(
+    const classificatioValue = lookup.elementClassificationValues.find(
       (item) => item.value === element.classificationValueId
     );
 
     if (classificatioValue?.label.toLowerCase() === 'deduction') {
-      return element.categoryValues.filter((item) =>
+      return lookup.elementCategoryValues.filter((item) =>
         item.label.toLowerCase().includes('deduction')
       );
     } else if (classificatioValue?.label.toLowerCase() === 'earning') {
-      return element.categoryValues.filter((item) =>
+      return lookup.elementCategoryValues.filter((item) =>
         item.label.toLowerCase().includes('earning')
       );
     }
 
-    return element.categoryValues;
+    return lookup.elementCategoryValues;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [element.classificationValueId, element.classificationValues]);
+  }, [element.classificationValueId, lookup.elementClassificationValues]);
 
   return (
     <ElementFormWrapper>
@@ -70,7 +71,7 @@ function ElementDetails({ FormItem }: Props) {
         >
           <InputSelect
             placeholder="Select Classification"
-            options={element.classificationValues}
+            options={lookup.elementClassificationValues}
             onChange={(value) =>
               dispatch(
                 updateElement({ classificationValueId: value as string })
@@ -112,7 +113,7 @@ function ElementDetails({ FormItem }: Props) {
         >
           <InputSelect
             placeholder="Select Payrun"
-            options={element.payValues}
+            options={lookup.payRunValues}
           />
         </FormItem>
       </DualFormContainer>
