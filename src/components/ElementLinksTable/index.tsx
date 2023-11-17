@@ -11,9 +11,14 @@ import { DropdownType, ElementLinkState, LookupType } from '../../slices/types';
 type Props = {
   handleEditElementLink: (record: ElementLinkState) => void;
   handleDelete: (id: string) => void;
+  showDetails: (record: ElementLinkState) => void;
 };
 
-function ElementLinksTable({ handleEditElementLink, handleDelete }: Props) {
+function ElementLinksTable({
+  handleEditElementLink,
+  handleDelete,
+  showDetails,
+}: Props) {
   const lookupCache = useSelector((state: RootState) => state.lookup);
   const { value: allElementLinks, isLoading: loading } = useSelector(
     (state: RootState) => state.allElementLinks
@@ -86,7 +91,7 @@ function ElementLinksTable({ handleEditElementLink, handleDelete }: Props) {
       key: 'details',
       width: 110,
       render: (_, record) => (
-        <Space size="middle">
+        <Space size="middle" onClick={() => showDetails(record)}>
           <View>View Details</View>
         </Space>
       ),

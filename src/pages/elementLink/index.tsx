@@ -16,13 +16,14 @@ import {
 import { Modal, message } from 'antd';
 import ElementLinkForm from '../../components/ElementLinkForm';
 import { ElementLinkState, Mode } from '../../slices/types';
-import { Form } from '../../styles';
+import { Drawer, Form } from '../../styles';
 import {
   editElementLink,
   resetElementLink,
   toggleLoading,
 } from '../../slices/elementLinkSlice';
 import { request } from '../../utilities/request';
+import ElementLinkDetals from '../../components/ElementLinkDetails';
 
 const modalTitle = {
   [Mode.create]: 'Create Element Link',
@@ -34,6 +35,8 @@ function Element() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isModalVisible, toggleModal] = useState<boolean>(false);
+  const [elementLinkDetails, setElementLinkDetails] =
+    useState<ElementLinkState | null>(null);
   const element = useSelector((state: RootState) => state.element);
   const elementLink = useSelector((state: RootState) => state.elementLink);
   const { lookUpCache } = useSelector((state: RootState) => state.lookup);
@@ -90,6 +93,10 @@ function Element() {
     toggleModal(false);
   };
 
+  const showElementLinkDetails = (details: ElementLinkState) => {
+    setElementLinkDetails(details);
+  };
+
   return (
     <>
       <ElementContainer>
@@ -111,6 +118,7 @@ function Element() {
         <ElementLinksTable
           handleEditElementLink={handleEditElementLink}
           handleDelete={handleDelete}
+          showDetails={showElementLinkDetails}
         />
         {/* this line ensures that the modal rerenders on toggle for the the benefit of the form wizard */}
         {isModalVisible && (
@@ -126,6 +134,18 @@ function Element() {
             <ElementLinkForm formData={form} handleCancel={handleCancel} />
           </Modal>
         )}
+        <Drawer
+          placement="right"
+          width={640}
+          closeIcon={<img src="/img/close.png" alt="close" />}
+          onClose={() => setElementLinkDetails(null)}
+          open={elementLinkDetails != null}
+        >
+          <Title level={3} style={{ marginBottom: '45px' }}>
+            Element Link Details
+          </Title>
+          <ElementLinkDetals elementLinkDetail={elementLinkDetails} />
+        </Drawer>
       </ElementContainer>
     </>
   );

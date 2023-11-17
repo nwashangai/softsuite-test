@@ -106,7 +106,7 @@ function AdditionalInfo({ FormItem, form }: Props) {
                   wrapperCol={{ span: 24, offset: 0 }}
                 >
                   <InputSelect
-                    placeholder="Select a Grade"
+                    placeholder={`Select a ${item.name}`}
                     options={
                       (lookup[
                         convertToValueFormat(item.name) as keyof LookupType

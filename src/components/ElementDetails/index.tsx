@@ -1,5 +1,5 @@
 import React from 'react';
-import { GridCol, GridRow, GridWrapper } from './styles';
+import { GridCol, GridRow, GridWrapper } from '../../styles';
 import { ElementState } from '../../slices/types';
 import { capitalizeFirstChar } from '../../utilities/capitalizeFirstChar';
 import { useSelector } from 'react-redux';

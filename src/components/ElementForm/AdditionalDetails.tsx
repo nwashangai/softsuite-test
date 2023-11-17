@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { updateElement } from '../../slices/elementSlice';
 import { formatDate } from '../../utilities/formatDate';
+import { capitalizeFirstChar } from '../../utilities/capitalizeFirstChar';
 
 type Props = {
   FormItem: typeof Form.Item;
@@ -61,7 +62,7 @@ function AdditionalDetails({ FormItem }: Props) {
             },
           ]}
         >
-          <DateInput placeholder=" Select Date" />
+          <DateInput format={'YYYY-MM-DD'} placeholder=" Select Date" />
         </FormItem>
 
         <FormItem
@@ -76,7 +77,7 @@ function AdditionalDetails({ FormItem }: Props) {
             },
           ]}
         >
-          <DateInput placeholder="Select Date" />
+          <DateInput format={'YYYY-MM-DD'} placeholder="Select Date" />
         </FormItem>
       </DualFormContainer>
       <DualFormContainer>
@@ -173,7 +174,9 @@ function AdditionalDetails({ FormItem }: Props) {
                 )
               }
             />{' '}
-            <span style={{ marginLeft: '10px' }}>Active</span>
+            <span style={{ marginLeft: '10px' }}>
+              {capitalizeFirstChar(element.status)}
+            </span>
           </InputWrap>
         </FormItem>
       </DualFormContainer>

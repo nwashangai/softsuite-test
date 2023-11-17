@@ -13,10 +13,11 @@ import {
 } from '../../styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { DropdownType, ElementLinkState } from '../../slices/types';
+import { ElementLinkState } from '../../slices/types';
 import { capitalizeFirstChar } from '../../utilities/capitalizeFirstChar';
 import { formatDate } from '../../utilities/formatDate';
 import { updateElementLink } from '../../slices/elementLinkSlice';
+import { amountTypeOptions } from '../../constants';
 
 type Props = {
   FormItem: typeof Form.Item;
@@ -27,17 +28,6 @@ const amountTypeMap: { [key: string]: string } = {
   rate: 'Rate(%)',
   '*': '...',
 };
-
-const amountTypeOptions: DropdownType[] = [
-  {
-    label: 'Fixed Value',
-    value: 'fixed',
-  },
-  {
-    label: 'Rate of Salary',
-    value: 'rate',
-  },
-];
 
 function ProcessinInfo({ FormItem }: Props) {
   const dispatch = useDispatch();
@@ -114,7 +104,7 @@ function ProcessinInfo({ FormItem }: Props) {
           )}
           wrapperCol={{ span: 24, offset: 0 }}
         >
-          <DateInput placeholder=" Select Date" />
+          <DateInput format={'YYYY-MM-DD'} placeholder=" Select Date" />
         </FormItem>
 
         <FormItem
@@ -123,7 +113,7 @@ function ProcessinInfo({ FormItem }: Props) {
           initialValue={formatDate(elementLink.effectiveEndDate, 'YYYY-MM-DD')}
           wrapperCol={{ span: 24, offset: 0 }}
         >
-          <DateInput placeholder="Select Date" />
+          <DateInput format={'YYYY-MM-DD'} placeholder="Select Date" />
         </FormItem>
       </DualFormContainer>
       <DualFormContainer>
@@ -155,7 +145,9 @@ function ProcessinInfo({ FormItem }: Props) {
                 )
               }
             />{' '}
-            <span style={{ marginLeft: '10px' }}>Active</span>
+            <span style={{ marginLeft: '10px' }}>
+              {capitalizeFirstChar(elementLink.status)}
+            </span>
           </InputWrap>
         </FormItem>
       </DualFormContainer>

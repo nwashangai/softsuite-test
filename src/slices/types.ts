@@ -18,6 +18,11 @@ export interface ElementState {
   payFrequency: string;
 }
 
+export type AdditionalData = {
+  lookupId: string | number;
+  lookupValueId: string | number;
+};
+
 export interface ElementLinkState {
   id?: string;
   name: string;
@@ -40,10 +45,7 @@ export interface ElementLinkState {
   effectiveEndDate?: string;
   status: string;
   automate?: string;
-  additionalInfo: {
-    lookupId: string | number;
-    lookupValueId: string | number;
-  }[];
+  additionalInfo: AdditionalData[];
   createdAt?: string;
 }
 
