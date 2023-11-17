@@ -13,11 +13,26 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { updateElement } from '../../slices/elementSlice';
-import moment from 'moment';
+import { formatDate } from '../../utilities/formatDate';
 
 type Props = {
   FormItem: typeof Form.Item;
 };
+
+const months = [
+  { value: 'january', label: 'January' },
+  { value: 'february', label: 'Fabuary' },
+  { value: 'march', label: 'March' },
+  { value: 'april', label: 'April' },
+  { value: 'may', label: 'May' },
+  { value: 'june', label: 'June' },
+  { value: 'july', label: 'July' },
+  { value: 'august', label: 'August' },
+  { value: 'september', label: 'September' },
+  { value: 'october', label: 'October' },
+  { value: 'november', label: 'November' },
+  { value: 'december', label: 'December' },
+];
 
 function AdditionalDetails({ FormItem }: Props) {
   const dispatch = useDispatch();
@@ -37,11 +52,7 @@ function AdditionalDetails({ FormItem }: Props) {
         <FormItem
           label="Effective Start Date"
           name="effectiveStartDate"
-          initialValue={
-            element.effectiveStartDate
-              ? moment(element.effectiveStartDate, 'YYYY-MM-DD')
-              : undefined
-          }
+          initialValue={formatDate(element.effectiveEndDate, 'YYYY-MM-DD')}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
@@ -56,11 +67,7 @@ function AdditionalDetails({ FormItem }: Props) {
         <FormItem
           label="Effective End Date"
           name="effectiveEndDate"
-          initialValue={
-            element.effectiveEndDate
-              ? moment(element.effectiveEndDate, 'YYYY-MM-DD')
-              : undefined
-          }
+          initialValue={formatDate(element.effectiveEndDate, 'YYYY-MM-DD')}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
@@ -130,12 +137,7 @@ function AdditionalDetails({ FormItem }: Props) {
           allowClear
           placeholder="Select"
           disabled={isSelectedMonthDisabled}
-          options={[
-            { value: 'january', label: 'January' },
-            { value: 'february', label: 'Fabuary' },
-            { value: 'march', label: 'March' },
-            { value: 'april', label: 'April' },
-          ]}
+          options={months}
         />
       </FormItem>
       <DualFormContainer>

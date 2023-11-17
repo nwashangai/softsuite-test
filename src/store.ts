@@ -1,5 +1,6 @@
 import { Action, configureStore } from '@reduxjs/toolkit';
 import elementSlice from './slices/elementSlice';
+import elementLinkSlice from './slices/elementLinkSlice';
 import allElementsSlice from './slices/allElementsSlice';
 import lookupSlice from './slices/lookupSlice';
 import allElementLinkSlice from './slices/allElementLinkSlice';
@@ -8,6 +9,7 @@ import thunk, { ThunkAction } from 'redux-thunk';
 const store = configureStore({
   reducer: {
     element: elementSlice,
+    elementLink: elementLinkSlice,
     allElements: allElementsSlice,
     allElementLinks: allElementLinkSlice,
     lookup: lookupSlice,

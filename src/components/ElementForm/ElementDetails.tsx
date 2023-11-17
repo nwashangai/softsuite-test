@@ -72,10 +72,8 @@ function ElementDetails({ FormItem }: Props) {
           <InputSelect
             placeholder="Select Classification"
             options={lookup.elementClassificationValues}
-            onChange={(value) =>
-              dispatch(
-                updateElement({ classificationValueId: value as string })
-              )
+            onChange={(value: string) =>
+              dispatch(updateElement({ classificationValueId: value }))
             }
           />
         </FormItem>

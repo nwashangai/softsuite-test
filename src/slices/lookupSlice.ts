@@ -21,6 +21,8 @@ const initialState: LookupType = {
   wardrobeValues: [{ value: '', label: 'Loading...', disabled: true }],
   unionValues: [{ value: '', label: 'Loading...', disabled: true }],
   subOrginazationValues: [{ value: '', label: 'Loading...', disabled: true }],
+  gradeValues: [{ value: '', label: 'Loading...', disabled: true }],
+  gradeStepsValues: [{ value: '', label: 'Loading...', disabled: true }],
   departmentvalues: [{ value: '', label: 'Loading...', disabled: true }],
   loading: true,
 };

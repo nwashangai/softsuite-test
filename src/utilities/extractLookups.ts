@@ -2,7 +2,15 @@ type LookupType = {
   name: string;
   description: string;
   suborganizationId: string;
+  gradeId: string;
   id: string;
+};
+
+type LookupValueType = {
+  label: string;
+  value: string;
+  suborganizationId?: string;
+  gradeId?: string;
 };
 
 function convertToIdFormat(inputString: string) {
@@ -28,9 +36,20 @@ export function extractLookupIds(data: Array<LookupType>) {
 }
 
 export function extractLookupValues(data: Array<LookupType>) {
-  return data.map((item) => ({
-    label: item.name,
-    value: item.id,
-    suborganizationId: item.suborganizationId,
-  }));
+  return data.map((item) => {
+    const result: LookupValueType = {
+      label: item.name,
+      value: item.id,
+    };
+
+    if (item.suborganizationId) {
+      result.suborganizationId = item.suborganizationId;
+    }
+
+    if (item.gradeId) {
+      result.gradeId = item.gradeId;
+    }
+
+    return result;
+  });
 }

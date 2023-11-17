@@ -48,7 +48,6 @@ function Element() {
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 5,
-    total: allElements.length,
   });
 
   const handleEditElement = (element: ElementState) => {
@@ -227,10 +226,11 @@ function Element() {
             pagination.current! * pagination.pageSize!
           )}
           loading={loading}
-          pagination={pagination}
+          pagination={{ ...pagination, total: allElements.length }}
           onChange={handleTableChange}
         />
       </ElementContainer>
+      {/* this line ensures that the modal rerenders on toggle for the the benefit of the form wizard */}
       {isModalVisible && (
         <Modal
           key={modalTitle[element.mode] + element.value.id || ''}

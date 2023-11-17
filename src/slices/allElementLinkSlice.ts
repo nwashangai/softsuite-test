@@ -25,7 +25,7 @@ const elementSlice = createSlice({
     addNewElementLink: (state, action: PayloadAction<ElementLinkState>) => {
       state.value = [...state.value, action.payload];
     },
-    replaceElement: (
+    replaceElementLink: (
       state,
       action: PayloadAction<{
         id: String;
@@ -64,7 +64,7 @@ export const {
   setElementLinks,
   toggleLoading,
   addNewElementLink,
-  replaceElement,
+  replaceElementLink,
   deleteItemById,
 } = elementSlice.actions;
 export default elementSlice.reducer;

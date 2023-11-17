@@ -9,7 +9,7 @@ import AdditionalDetails from './AdditionalDetails';
 import { ElementState, Mode } from '../../slices/types';
 import eventBus from '../../utilities/eventBus';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleLoading } from '../../slices/elementSlice';
+import { toggleLoading, updateElement } from '../../slices/elementSlice';
 import { RootState } from '../../store';
 import moment from 'moment';
 import { request } from '../../utilities/request';
@@ -109,7 +109,7 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
           .then((response) => {
             dispatch(addNewElement(response.data));
             setCurrentTab(0);
-            message.success('Element Link has been created successfully');
+            message.success('Element has been created successfully');
             handleCancel();
           })
           .catch(() => {
@@ -127,7 +127,6 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
           payload
         )
           .then((response) => {
-            console.log(response);
             dispatch(
               replaceElement({ id: element.id!, updatedElement: response.data })
             );
@@ -170,6 +169,8 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
         setCurrentTab={setCurrentTab}
         name="element-form"
         handleCancel={handleCancel}
+        updateSlice={updateElement}
+        mode={mode}
       />
     </Form>
   );

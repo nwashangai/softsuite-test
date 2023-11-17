@@ -40,7 +40,7 @@ export const loadDependencyData = async (
   }
 };
 
-function convertToValueFormat(inputString: string) {
+export function convertToValueFormat(inputString: string) {
   const words = inputString.split(' ');
   const camelCaseWords = words.map((word, index) => {
     if (index === 0) {
@@ -72,6 +72,29 @@ const loadDepartments = async (data: LookupValuesType[]) => {
   }
 };
 
+const loadGradeSteps = async (dispatch: AppDispatch) => {
+  try {
+    const grades = await request(
+      'https://650af6bedfd73d1fab094cf7.mockapi.io/grade'
+    );
+    const asyncCalls = grades.data.map((item: LookupValuesType) =>
+      request(
+        `https://650af6bedfd73d1fab094cf7.mockapi.io/grade/${item.id}/gradesteps`
+      )
+    );
+    const batchResponse = await Promise.all(asyncCalls);
+    const flatData = batchResponse.reduce(
+      (prev, current) => [...prev, ...current.data],
+      []
+    );
+    const gradeValues = extractLookupValues(grades.data);
+    const gradeSteps = extractLookupValues(flatData);
+    dispatch(setLookupValues({ gradeValues, gradeStepsValues: gradeSteps }));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getLookupValues = async (
   lookup: LookupValuesType[],
   dispatch: AppDispatch
@@ -95,11 +118,10 @@ export const getLookupValues = async (
     dataObj['subOrginazationValues'] = extractLookupValues(
       batchResponse[batchResponse.length - 1].data
     );
-
     dataObj['departmentvalues'] = await loadDepartments(
       batchResponse[batchResponse.length - 1].data
     );
-
+    loadGradeSteps(dispatch);
     dispatch(setLookupValues(dataObj));
   } catch (error: any) {
     console.error(error);

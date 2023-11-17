@@ -6,21 +6,26 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ActionWrapper, Tag, View } from './styles';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DropdownType, ElementLinkState, LookupType } from '../../slices/types';
 
-function ElementLinksTable() {
+type Props = {
+  handleEditElementLink: (record: ElementLinkState) => void;
+  handleDelete: (id: string) => void;
+};
+
+function ElementLinksTable({ handleEditElementLink, handleDelete }: Props) {
   const lookupCache = useSelector((state: RootState) => state.lookup);
   const { value: allElementLinks, isLoading: loading } = useSelector(
     (state: RootState) => state.allElementLinks
   );
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
-    pageSize: 5,
-    total: allElementLinks.length,
+    pageSize: 3,
   });
 
   const lookupLabel = (group: string, id: number) =>
-    lookupCache.employeeCategoryValues.find(
-      (option) => Number(option.value) === id
+    (lookupCache[group as keyof LookupType] as DropdownType[]).find(
+      (option) => option.value.toString() === id.toString()
     )?.label;
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
@@ -38,22 +43,30 @@ function ElementLinksTable() {
       title: 'Sub-Organization',
       dataIndex: 'suborganizationId',
       key: 'suborganizationId',
-      render: (id, record) => (
-        <div>{lookupLabel('subOrginazationValues', id) || 'loading...'}</div>
+      render: (id) => (
+        <div>
+          {id
+            ? lookupLabel('subOrginazationValues', id) || 'loading...'
+            : 'No Category'}
+        </div>
       ),
     },
     {
       title: 'Department',
       key: 'departmentId',
       dataIndex: 'departmentId',
-      render: (id, record) => (
-        <div>{lookupLabel('departmentvalues', id) || 'loading...'}</div>
+      render: (id) => (
+        <div>
+          {id
+            ? lookupLabel('departmentvalues', id) || 'loading...'
+            : 'No Category'}
+        </div>
       ),
     },
     {
       title: 'Employee Category',
-      dataIndex: 'employeeCategoryId',
-      key: 'employeeCategoryId',
+      dataIndex: 'employeeCategoryValueId',
+      key: 'employeeCategoryValueId',
       render: (id) => (
         <div>
           {id
@@ -84,10 +97,18 @@ function ElementLinksTable() {
       width: 80,
       render: (_, record) => (
         <ActionWrapper>
-          <Tag bordered={false} color="#F6F7F9">
+          <Tag
+            bordered={false}
+            color="#F6F7F9"
+            onClick={() => handleEditElementLink(record)}
+          >
             <EditOutlined style={{ color: '#2D416F' }} />
           </Tag>
-          <Tag bordered={false} color="red">
+          <Tag
+            bordered={false}
+            color="red"
+            onClick={() => handleDelete(record.id)}
+          >
             <DeleteOutlined />
           </Tag>
         </ActionWrapper>
@@ -104,7 +125,7 @@ function ElementLinksTable() {
         pagination.current! * pagination.pageSize!
       )}
       loading={loading}
-      pagination={pagination}
+      pagination={{ ...pagination, total: allElementLinks.length }}
       onChange={handleTableChange}
     />
   );

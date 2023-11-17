@@ -43,8 +43,16 @@ export const DateInput = styled(DatePicker)`
 `;
 
 export const InputSwitch = styled(Switch)`
-  .ant-switch.ant-switch-checked {
+  &[aria-checked='true'] {
     background-color: ${({ theme }) => theme.primaryColor};
+  }
+
+  &:not([aria-checked='true']) {
+    background-color: ${({ theme }) => theme.danger};
+  }
+
+  &&&[aria-checked='true']:hover {
+    background-color: ${({ theme }) => theme.grayBg};
   }
 `;
 

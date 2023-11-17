@@ -5,7 +5,8 @@ import Button from '../Button';
 import { FormInstance } from 'antd';
 import useValidate from '../../hooks/useValidate';
 import { useDispatch } from 'react-redux';
-import { updateElement } from '../../slices/elementSlice';
+import { AnyAction } from 'redux';
+import { Mode } from '../../slices/types';
 
 type Props = {
   steps: Array<{ title: string; content: JSX.Element; fields?: Array<string> }>;
@@ -14,7 +15,19 @@ type Props = {
   setCurrentTab: (tab: number) => void;
   name?: string;
   handleCancel: () => void;
+  updateSlice: (payload: { [key: string]: any }) => AnyAction;
   loading?: boolean;
+  mode: Mode;
+};
+
+const nameMap: { [key: string]: string } = {
+  'element-link-form': 'Element Link',
+  'element-form': 'Element',
+};
+
+const modeMap: { [key: string]: string } = {
+  [Mode.create]: 'Create',
+  [Mode.edit]: 'Update',
 };
 
 function FormWizard({
@@ -25,6 +38,8 @@ function FormWizard({
   loading,
   setCurrentTab,
   handleCancel,
+  updateSlice,
+  mode,
 }: Props) {
   const dispatch = useDispatch();
   const hasMoreTabs = useMemo(
@@ -44,9 +59,7 @@ function FormWizard({
 
   const handleNextBtn = () => {
     if (hasMoreTabs) {
-      dispatch(
-        updateElement(form.getFieldsValue(steps[currentTab]?.fields || []))
-      );
+      dispatch(updateSlice(form.getFieldsValue()));
       setCurrentTab(currentTab + 1);
     } else {
       form.submit();
@@ -77,7 +90,7 @@ function FormWizard({
           disabled={hasMoreTabs && !canGoToNext}
           loading={loading}
         >
-          {hasMoreTabs ? 'Next' : 'Create Element'}
+          {hasMoreTabs ? 'Next' : `${modeMap[mode]} ${nameMap[name as string]}`}
         </Button>
       </FormFooter>
     </WizardWrapper>

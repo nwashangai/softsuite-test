@@ -22,27 +22,27 @@ export interface ElementLinkState {
   id?: string;
   name: string;
   elementId: string;
-  suborganizationId?: number;
-  locationId?: number;
-  departmentId?: number;
+  suborganizationId?: string | number;
+  locationId?: string | number;
+  departmentId?: string | number;
   employeeCategoryId?: string | number;
   employeeCategoryValueId?: string | number;
   employeeTypeId?: string | number;
   employeeTypeValueId?: number;
   jobTitleId?: string | number;
-  grade: string | number;
-  gradeStep: string | number;
-  unionId: string | number;
-  amountType: string;
-  amount: number;
-  rate: string | number;
+  grade?: string | number;
+  gradeStep?: string | number;
+  unionId?: string | number;
+  amountType?: string;
+  amount?: number;
+  rate?: string | number;
   effectiveStartDate?: string;
   effectiveEndDate?: string;
   status: string;
   automate?: string;
   additionalInfo: {
-    lookupId: number;
-    lookupValueId: number;
+    lookupId: string | number;
+    lookupValueId: string | number;
   }[];
   createdAt?: string;
 }
@@ -57,6 +57,7 @@ export type DropdownType = {
   value: string;
   label: string;
   suborganizationId?: string;
+  gradeId?: string;
   disabled?: boolean;
 };
 
@@ -83,6 +84,8 @@ export type LookupType = {
   wardrobeValues: Array<DropdownType>;
   unionValues: Array<DropdownType>;
   subOrginazationValues: Array<DropdownType>;
+  gradeValues: Array<DropdownType>;
+  gradeStepsValues: Array<DropdownType>;
   departmentvalues: Array<DropdownType>;
   loading: boolean;
   lookUpCache: { [key: string]: any };
