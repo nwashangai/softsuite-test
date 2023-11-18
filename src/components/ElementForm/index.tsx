@@ -109,6 +109,7 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
           .then((response) => {
             dispatch(addNewElement(response.data));
             setCurrentTab(0);
+            handleCancel();
             eventBus.emit('notification-message', {
               title: 'Element has been created successfully',
             });
@@ -132,6 +133,7 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
               replaceElement({ id: element.id!, updatedElement: response.data })
             );
             setCurrentTab(0);
+            handleCancel();
             eventBus.emit('notification-message', {
               title: 'Element has been updated successfully',
             });
