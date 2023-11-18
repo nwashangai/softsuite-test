@@ -17,10 +17,18 @@ export const UserInfoWrapper = styled.div`
   width: auto;
 
   > span {
+    font-size: 12px;
+  }
+
+  > span {
     line-height: 15px;
   }
 
   > span:first-child {
     font-weight: bold;
+  }
+
+  > span:last-child {
+    font-weight: lighter;
   }
 `;

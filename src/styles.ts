@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import {
   Input,
   Select,
+  Button,
   DatePicker,
   Switch,
   Form as AntForm,
@@ -9,6 +10,8 @@ import {
   Drawer as AntDrawer,
   Table as AntTable,
   Dropdown as AntDropdown,
+  Result as AntResult,
+  ResultProps,
 } from 'antd';
 
 export const InputText = styled(Input)`
@@ -206,5 +209,48 @@ export const GridCol = styled.div`
 
   > span:last-child {
     font-weight: 500;
+  }
+`;
+
+export const Result = styled(AntResult)<ResultProps & { isDelete?: boolean }>`
+  &.ant-result {
+    padding: 10px;
+  }
+
+  &.ant-result-error .ant-result-icon > .anticon,
+  &.ant-result-success .ant-result-icon > .anticon {
+    padding: 15px;
+    border-radius: 50%;
+  }
+
+  &.ant-result-error .ant-result-icon > .anticon {
+    background-color: ${({ theme }) => theme.dangerLight};
+  }
+
+  &.ant-result-success .ant-result-icon > .anticon {
+    background-color: ${({ theme, isDelete }) =>
+      isDelete ? theme.dangerLight : theme.success};
+    color: ${({ theme, isDelete }) =>
+      isDelete ? theme.confirmDelete : theme.primaryColor};
+  }
+
+  &.ant-result .ant-result-title {
+    color: ${({ theme }) => theme.textColor};
+  }
+`;
+
+export const ConfirmButton = styled(Button)`
+  height: 40px;
+
+  &:last-child > span {
+    color: ${({ theme }) => theme.white};
+  }
+
+  &:first-child > span {
+    color: ${({ theme }) => theme.grayText};
+  }
+
+  &.ant-btn-primary.ant-btn-dangerous {
+    background-color: ${({ theme }) => theme.confirmDelete};
   }
 `;

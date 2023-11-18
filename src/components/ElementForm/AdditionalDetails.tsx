@@ -53,7 +53,7 @@ function AdditionalDetails({ FormItem }: Props) {
         <FormItem
           label="Effective Start Date"
           name="effectiveStartDate"
-          initialValue={formatDate(element.effectiveEndDate, 'YYYY-MM-DD')}
+          initialValue={formatDate(element.effectiveEndDate, 'DD-MM-YYYY')}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
@@ -62,13 +62,13 @@ function AdditionalDetails({ FormItem }: Props) {
             },
           ]}
         >
-          <DateInput format={'YYYY-MM-DD'} placeholder=" Select Date" />
+          <DateInput format={'DD-MM-YYYY'} placeholder=" Select Date" />
         </FormItem>
 
         <FormItem
           label="Effective End Date"
           name="effectiveEndDate"
-          initialValue={formatDate(element.effectiveEndDate, 'YYYY-MM-DD')}
+          initialValue={formatDate(element.effectiveEndDate, 'DD-MM-YYYY')}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
@@ -77,7 +77,7 @@ function AdditionalDetails({ FormItem }: Props) {
             },
           ]}
         >
-          <DateInput format={'YYYY-MM-DD'} placeholder="Select Date" />
+          <DateInput format={'DD-MM-YYYY'} placeholder="Select Date" />
         </FormItem>
       </DualFormContainer>
       <DualFormContainer>

@@ -25,7 +25,7 @@ function ElementLinksTable({
   );
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
-    pageSize: 3,
+    pageSize: 10,
   });
 
   const lookupLabel = (group: string, id: number) =>

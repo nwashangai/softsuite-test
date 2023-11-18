@@ -121,8 +121,10 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
           .then((response) => {
             dispatch(addNewElementLink(response.data));
             setCurrentTab(0);
-            message.success('Element Link has been created successfully');
             handleCancel();
+            eventBus.emit('notification-message', {
+              title: 'Element Link has been created successfully',
+            });
           })
           .catch(() => {
             message.error('Error Occured Creating Element');
@@ -145,8 +147,10 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
               })
             );
             setCurrentTab(0);
-            message.success('Element Link has been updated successfully');
             handleCancel();
+            eventBus.emit('notification-message', {
+              title: 'Element Link has been updated successfully',
+            });
           })
           .catch(() => {
             message.error('Error Occured Creating Element');

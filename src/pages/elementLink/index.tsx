@@ -16,7 +16,7 @@ import {
 import { Modal, message } from 'antd';
 import ElementLinkForm from '../../components/ElementLinkForm';
 import { ElementLinkState, Mode } from '../../slices/types';
-import { Drawer, Form } from '../../styles';
+import { ConfirmButton, Drawer, Form, Result } from '../../styles';
 import {
   editElementLink,
   resetElementLink,
@@ -24,6 +24,8 @@ import {
 } from '../../slices/elementLinkSlice';
 import { request } from '../../utilities/request';
 import ElementLinkDetals from '../../components/ElementLinkDetails';
+import { DeleteOutlined } from '@ant-design/icons';
+import eventBus from '../../utilities/eventBus';
 
 const modalTitle = {
   [Mode.create]: 'Create Element Link',
@@ -35,10 +37,14 @@ function Element() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isModalVisible, toggleModal] = useState<boolean>(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [elementLinkDetails, setElementLinkDetails] =
     useState<ElementLinkState | null>(null);
   const element = useSelector((state: RootState) => state.element);
   const elementLink = useSelector((state: RootState) => state.elementLink);
+  const loading = useSelector(
+    (state: RootState) => state.elementLink.isLoading
+  );
   const { lookUpCache } = useSelector((state: RootState) => state.lookup);
   const { elementId } = useParams();
   const [form] = Form.useForm<ElementLinkState>();
@@ -71,18 +77,21 @@ function Element() {
   };
 
   const handleDelete = (id: string) => {
-    toggleLoading(true);
+    dispatch(toggleLoading(true));
     request(
       `https://650af6bedfd73d1fab094cf7.mockapi.io/elements/${elementId}/elementlinks/${id}`,
       'Delete'
     )
       .then(() => {
         dispatch(deleteItemById(id));
-        message.success('Element has been deleted successfully');
-        handleCancel();
+        setDeleteId(null);
+        eventBus.emit('notification-message', {
+          title: 'Element Link has been deleted successfully',
+          isDelete: true,
+        });
       })
-      .catch(() => {
-        message.error('Error Occured Creating Element');
+      .catch((error) => {
+        message.error(error.message);
       })
       .finally(() => {
         dispatch(toggleLoading(false));
@@ -117,7 +126,7 @@ function Element() {
         />
         <ElementLinksTable
           handleEditElementLink={handleEditElementLink}
-          handleDelete={handleDelete}
+          handleDelete={setDeleteId}
           showDetails={showElementLinkDetails}
         />
         {/* this line ensures that the modal rerenders on toggle for the the benefit of the form wizard */}
@@ -125,7 +134,7 @@ function Element() {
           <Modal
             key={modalTitle[elementLink.mode] + elementLink.value.id || ''}
             title={modalTitle[elementLink.mode]}
-            visible={isModalVisible}
+            open={isModalVisible}
             onCancel={handleCancel}
             footer={null}
             width="100%"
@@ -134,6 +143,37 @@ function Element() {
             <ElementLinkForm formData={form} handleCancel={handleCancel} />
           </Modal>
         )}
+        <Modal
+          open={deleteId != null}
+          width={400}
+          onCancel={() => setDeleteId(null)}
+          maskClosable={false}
+          footer={null}
+        >
+          <Result
+            status="error"
+            title="Are you sure you want to delete Element Link?"
+            subTitle="You can’t reverse this action"
+            icon={<DeleteOutlined style={{ width: '40px', height: '40px' }} />}
+            extra={[
+              <ConfirmButton
+                onClick={() => setDeleteId(null)}
+                style={{ width: '35%' }}
+              >
+                Cancel
+              </ConfirmButton>,
+              <ConfirmButton
+                onClick={() => handleDelete(deleteId!)}
+                style={{ width: '60%' }}
+                loading={loading}
+                type="primary"
+                danger
+              >
+                Yes, Delete
+              </ConfirmButton>,
+            ]}
+          />
+        </Modal>
         <Drawer
           placement="right"
           width={640}

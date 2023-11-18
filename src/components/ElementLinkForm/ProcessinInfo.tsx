@@ -100,20 +100,20 @@ function ProcessinInfo({ FormItem }: Props) {
           name="effectiveStartDate"
           initialValue={formatDate(
             elementLink.effectiveStartDate,
-            'YYYY-MM-DD'
+            'DD-MM-YYYY'
           )}
           wrapperCol={{ span: 24, offset: 0 }}
         >
-          <DateInput format={'YYYY-MM-DD'} placeholder=" Select Date" />
+          <DateInput format={'DD-MM-YYYY'} placeholder=" Select Date" />
         </FormItem>
 
         <FormItem
           label="Effective End Date"
           name="effectiveEndDate"
-          initialValue={formatDate(elementLink.effectiveEndDate, 'YYYY-MM-DD')}
+          initialValue={formatDate(elementLink.effectiveEndDate, 'DD-MM-YYYY')}
           wrapperCol={{ span: 24, offset: 0 }}
         >
-          <DateInput format={'YYYY-MM-DD'} placeholder="Select Date" />
+          <DateInput format={'DD-MM-YYYY'} placeholder="Select Date" />
         </FormItem>
       </DualFormContainer>
       <DualFormContainer>

@@ -9,6 +9,9 @@ const theme = {
   defaultBorderColor: 'rgba(5, 5, 5, 0.06)',
   white: '#fff',
   danger: '#f54040',
+  confirmDelete: '#E05453',
+  dangerLight: '#FCEEEE',
+  success: '#93CCAF',
   background: '#f5f5f5',
   grayShade1: '#7E7E7E',
 };

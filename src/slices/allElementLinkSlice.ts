@@ -41,7 +41,9 @@ const elementSlice = createSlice({
     },
     deleteItemById: (state, action: PayloadAction<String>) => {
       const id = action.payload;
-      state.value = state.value.filter((item) => item.id !== id);
+      console.log(id, typeof id);
+
+      state.value = state.value.filter((item) => item.id?.toString() !== id);
     },
     toggleLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action?.payload || false;

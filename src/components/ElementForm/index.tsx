@@ -73,9 +73,9 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
     } = values;
 
     const formattedEffectiveStartDate =
-      moment(effectiveStartDate).format('YYYY-MM-DD');
+      moment(effectiveStartDate).format('DD-MM-YYYY');
     const formattedEffectiveEndDate =
-      moment(effectiveEndDate).format('YYYY-MM-DD');
+      moment(effectiveEndDate).format('DD-MM-YYYY');
 
     const payload = {
       name,
@@ -109,8 +109,9 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
           .then((response) => {
             dispatch(addNewElement(response.data));
             setCurrentTab(0);
-            message.success('Element has been created successfully');
-            handleCancel();
+            eventBus.emit('notification-message', {
+              title: 'Element has been created successfully',
+            });
           })
           .catch(() => {
             message.error('Error Occured Creating Element');
@@ -131,8 +132,9 @@ const ElementForm: React.FC<Props> = ({ formData, handleCancel }) => {
               replaceElement({ id: element.id!, updatedElement: response.data })
             );
             setCurrentTab(0);
-            message.success('Element has been updated successfully');
-            handleCancel();
+            eventBus.emit('notification-message', {
+              title: 'Element has been updated successfully',
+            });
           })
           .catch(() => {
             message.error('Error Occured Creating Element');

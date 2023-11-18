@@ -6,7 +6,7 @@ function User() {
     <UserWrapper>
       <UserAvatar src="https://i.pravatar.cc" />
       <UserInfoWrapper>
-        <span>Henry Okoro</span>
+        <span>Young Nwadike</span>
         <span>Project Manager</span>
       </UserInfoWrapper>
     </UserWrapper>
