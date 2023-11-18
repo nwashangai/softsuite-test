@@ -15,9 +15,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ElementLinkState } from '../../slices/types';
 import { capitalizeFirstChar } from '../../utilities/capitalizeFirstChar';
-import { formatDate } from '../../utilities/formatDate';
 import { updateElementLink } from '../../slices/elementLinkSlice';
 import { amountTypeOptions } from '../../constants';
+import { convertToAntDatePickerFormat } from '../../utilities/formatDate';
 
 type Props = {
   FormItem: typeof Form.Item;
@@ -98,9 +98,8 @@ function ProcessinInfo({ FormItem }: Props) {
         <FormItem
           label="Effective Start Date"
           name="effectiveStartDate"
-          initialValue={formatDate(
-            elementLink.effectiveStartDate,
-            'DD-MM-YYYY'
+          initialValue={convertToAntDatePickerFormat(
+            elementLink.effectiveStartDate || ''
           )}
           wrapperCol={{ span: 24, offset: 0 }}
         >
@@ -110,7 +109,9 @@ function ProcessinInfo({ FormItem }: Props) {
         <FormItem
           label="Effective End Date"
           name="effectiveEndDate"
-          initialValue={formatDate(elementLink.effectiveEndDate, 'DD-MM-YYYY')}
+          initialValue={convertToAntDatePickerFormat(
+            elementLink.effectiveEndDate || ''
+          )}
           wrapperCol={{ span: 24, offset: 0 }}
         >
           <DateInput format={'DD-MM-YYYY'} placeholder="Select Date" />

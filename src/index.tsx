@@ -14,6 +14,7 @@ import Element from './pages/element';
 import ElementLink from './pages/elementLink';
 import AppProvider from './providers/AppProvider';
 import store from './store';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -22,27 +23,29 @@ root.render(
   // <React.StrictMode>
   <ThemeProvider theme={theme}>
     <ConfigProvider locale={enUS}>
-      <Provider store={store}>
-        <GlobalStyles />
-        <AppProvider>
-          <Router>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<App />} />
-                <Route
-                  path="/payrole-management/element-setup/element"
-                  element={<Element />}
-                />
-                <Route
-                  path="/payrole-management/element-setup/element/:elementId/link"
-                  element={<ElementLink />}
-                />
-                <Route path="*" element={<App />} />
-              </Route>
-            </Routes>
-          </Router>
-        </AppProvider>
-      </Provider>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <GlobalStyles />
+          <AppProvider>
+            <Router>
+              <Routes>
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<App />} />
+                  <Route
+                    path="/payrole-management/element-setup/element"
+                    element={<Element />}
+                  />
+                  <Route
+                    path="/payrole-management/element-setup/element/:elementId/link"
+                    element={<ElementLink />}
+                  />
+                  <Route path="*" element={<App />} />
+                </Route>
+              </Routes>
+            </Router>
+          </AppProvider>
+        </Provider>
+      </ErrorBoundary>
     </ConfigProvider>
   </ThemeProvider>
   // </React.StrictMode>

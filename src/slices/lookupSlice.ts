@@ -6,7 +6,6 @@ import { request } from '../utilities/request';
 
 const initialState: LookupType = {
   lookups: [],
-  lookUpCache: {},
   elementCategoryValues: [{ value: '', label: 'Loading...', disabled: true }],
   elementClassificationValues: [
     { value: '', label: 'Loading...', disabled: true },
@@ -35,15 +34,6 @@ const lookupSlice = createSlice({
       state.lookups = action.payload;
       state.loading = false;
     },
-    updateCache: (
-      state,
-      action: PayloadAction<{ key: string; value: string }>
-    ) => {
-      state.lookUpCache = {
-        ...state.lookUpCache,
-        [action.payload.key]: action.payload.value,
-      };
-    },
     setLookupValues: (state, action: PayloadAction<Partial<LookupType>>) => {
       return {
         ...state,
@@ -64,5 +54,5 @@ export const fetchInitalDataAsync = (): AppThunk => async (dispatch) => {
   } catch (error) {}
 };
 
-export const { setLookups, setLookupValues, updateCache } = lookupSlice.actions;
+export const { setLookups, setLookupValues } = lookupSlice.actions;
 export default lookupSlice.reducer;

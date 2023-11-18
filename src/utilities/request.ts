@@ -34,6 +34,10 @@ export async function request(
     const response = await fetch(url, options);
 
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Too many request, refresh in one minute');
+      }
+
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 

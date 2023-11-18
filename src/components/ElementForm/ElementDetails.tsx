@@ -1,4 +1,5 @@
-import React, { memo, useMemo } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { memo, useEffect, useMemo } from 'react';
 import { Form } from 'antd';
 import { ElementFormWrapper } from './styles';
 import {
@@ -36,8 +37,23 @@ function ElementDetails({ FormItem }: Props) {
     }
 
     return lookup.elementCategoryValues;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [element.classificationValueId, lookup.elementClassificationValues]);
+
+  useEffect(() => {
+    if (!element.classificationId || !element.categoryId || !element.payRunId) {
+      const classificationId = lookup.lookups.find(
+        (item) => item.name === 'Element Classification'
+      )?.id;
+      const categoryId = lookup.lookups.find(
+        (item) => item.name === 'Employee Category'
+      )?.id;
+      const payRunId = lookup.lookups.find(
+        (item) => item.name === 'Pay Run'
+      )?.id;
+
+      dispatch(updateElement({ classificationId, categoryId, payRunId }));
+    }
+  }, []);
 
   return (
     <ElementFormWrapper>

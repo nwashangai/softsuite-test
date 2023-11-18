@@ -45,7 +45,6 @@ function Element() {
   const loading = useSelector(
     (state: RootState) => state.elementLink.isLoading
   );
-  const { lookUpCache } = useSelector((state: RootState) => state.lookup);
   const { elementId } = useParams();
   const [form] = Form.useForm<ElementLinkState>();
   useEffect(() => {
@@ -54,9 +53,7 @@ function Element() {
 
   useEffect(() => {
     if (elementId) {
-      dispatch(
-        fetchAllLinkDataAsync(elementId, lookUpCache) as unknown as AnyAction
-      );
+      dispatch(fetchAllLinkDataAsync(elementId) as unknown as AnyAction);
     }
   }, [elementId]);
 

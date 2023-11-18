@@ -52,7 +52,7 @@ const elementSlice = createSlice({
 });
 
 export const fetchAllLinkDataAsync =
-  (id: string, cache: { [key: string]: any }): AppThunk =>
+  (id: string): AppThunk =>
   async (dispatch) => {
     try {
       const response = await request(

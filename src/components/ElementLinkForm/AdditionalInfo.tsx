@@ -16,7 +16,6 @@ import {
   updateAdditionalAssignmentInfo,
   updateElementLink,
 } from '../../slices/elementLinkSlice';
-import eventBus from '../../utilities/eventBus';
 
 type Props = {
   FormItem: typeof Form.Item;
@@ -37,7 +36,6 @@ function AdditionalInfo({ FormItem, form }: Props) {
   );
 
   const updateGradeSteps = (grade: string) => {
-    form.resetFields(['gradeStep']);
     dispatch(updateElementLink({ gradeStep: undefined, grade }));
 
     setGradeSteps(
@@ -46,8 +44,10 @@ function AdditionalInfo({ FormItem, form }: Props) {
   };
 
   useEffect(() => {
-    eventBus.on('change-grade', updateGradeSteps);
-  }, []);
+    if (!elementLink.gradeStep) {
+      form.resetFields(['gradeStep']);
+    }
+  }, [elementLink.gradeStep]);
 
   return (
     <ElementLinkFormWrapper>
@@ -61,7 +61,7 @@ function AdditionalInfo({ FormItem, form }: Props) {
           <InputSelect
             placeholder="Select a Grade"
             options={lookup.gradeValues}
-            onChange={(value) => eventBus.emit('change-grade', value)}
+            onChange={(value) => updateGradeSteps(value as string)}
           />
         </FormItem>
 

@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { updateElement } from '../../slices/elementSlice';
-import { formatDate } from '../../utilities/formatDate';
+import { convertToAntDatePickerFormat } from '../../utilities/formatDate';
 import { capitalizeFirstChar } from '../../utilities/capitalizeFirstChar';
 
 type Props = {
@@ -53,7 +53,9 @@ function AdditionalDetails({ FormItem }: Props) {
         <FormItem
           label="Effective Start Date"
           name="effectiveStartDate"
-          initialValue={formatDate(element.effectiveEndDate, 'DD-MM-YYYY')}
+          initialValue={convertToAntDatePickerFormat(
+            element.effectiveStartDate
+          )}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {
@@ -68,7 +70,7 @@ function AdditionalDetails({ FormItem }: Props) {
         <FormItem
           label="Effective End Date"
           name="effectiveEndDate"
-          initialValue={formatDate(element.effectiveEndDate, 'DD-MM-YYYY')}
+          initialValue={convertToAntDatePickerFormat(element.effectiveEndDate)}
           wrapperCol={{ span: 24, offset: 0 }}
           rules={[
             {

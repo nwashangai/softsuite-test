@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Table } from '../../styles';
-import { Space, TablePaginationConfig } from 'antd';
+import { Space } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { ActionWrapper, Tag, View } from './styles';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { DropdownType, ElementLinkState, LookupType } from '../../slices/types';
+import { usePagination } from '../../hooks/usePagination';
 
 type Props = {
   handleEditElementLink: (record: ElementLinkState) => void;
@@ -23,19 +24,12 @@ function ElementLinksTable({
   const { value: allElementLinks, isLoading: loading } = useSelector(
     (state: RootState) => state.allElementLinks
   );
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: 1,
-    pageSize: 10,
-  });
-
+  const { data, pagination, onChange } =
+    usePagination<ElementLinkState>(allElementLinks);
   const lookupLabel = (group: string, id: number) =>
     (lookupCache[group as keyof LookupType] as DropdownType[]).find(
       (option) => option.value.toString() === id.toString()
     )?.label;
-
-  const handleTableChange = (pagination: TablePaginationConfig) => {
-    setPagination(pagination);
-  };
 
   const columns: ColumnsType<any> = [
     {
@@ -125,13 +119,10 @@ function ElementLinksTable({
     <Table
       columns={columns}
       sticky
-      dataSource={allElementLinks.slice(
-        (pagination.current! - 1) * pagination.pageSize!,
-        pagination.current! * pagination.pageSize!
-      )}
+      dataSource={data}
       loading={loading}
       pagination={{ ...pagination, total: allElementLinks.length }}
-      onChange={handleTableChange}
+      onChange={onChange}
     />
   );
 }

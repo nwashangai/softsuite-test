@@ -6,12 +6,10 @@ import { request } from '../utilities/request';
 const initialState: {
   value: ElementState[];
   isLoading: boolean;
-  lookUpCache: { [key: string]: any };
   total: number;
 } = {
   value: [],
   isLoading: true,
-  lookUpCache: {},
   total: 0,
 };
 

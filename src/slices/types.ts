@@ -90,5 +90,4 @@ export type LookupType = {
   gradeStepsValues: Array<DropdownType>;
   departmentvalues: Array<DropdownType>;
   loading: boolean;
-  lookUpCache: { [key: string]: any };
 };

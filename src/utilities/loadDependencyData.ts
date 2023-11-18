@@ -1,44 +1,8 @@
-import { updateCache } from '../slices/lookupSlice';
 import { DropdownType, LookupValuesType } from '../slices/types';
 import { request } from './request';
 import { extractLookupValues } from './extractLookups';
 import { AppDispatch } from '../store';
 import { setLookupValues } from '../slices/lookupSlice';
-
-type LooupCacheType = {
-  lookupIdKey: string;
-  valueIdKey: string;
-};
-
-export const loadDependencyData = async (
-  data: any[],
-  columns: LooupCacheType[],
-  dispatch: any,
-  defaultCache: {
-    [key: string]: any;
-  }
-) => {
-  const cache: string[] = Object.keys(defaultCache);
-  for (let i = 0; i < data.length; i++) {
-    for (const item of columns) {
-      const key = `${item.lookupIdKey}-${data[i][item.lookupIdKey]}:value-${
-        data[i][item.valueIdKey]
-      }`;
-
-      if (!cache.includes(key)) {
-        try {
-          const response = await request(
-            `https://650af6bedfd73d1fab094cf7.mockapi.io/lookups/${
-              data[i][item.lookupIdKey]
-            }/lookupvalues/${data[i][item.valueIdKey]}`
-          );
-          dispatch(updateCache({ key, value: response.name }));
-          cache.push(key);
-        } catch (error) {}
-      }
-    }
-  }
-};
 
 export function convertToValueFormat(inputString: string) {
   const words = inputString.split(' ');

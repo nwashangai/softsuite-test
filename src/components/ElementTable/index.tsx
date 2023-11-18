@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ActionItems, Dropdown, Table } from '../../styles';
-import { MenuProps, Space, TablePaginationConfig, Tag } from 'antd';
+import { MenuProps, Space, Tag } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { DropdownType, ElementState, LookupType } from '../../slices/types';
 import { formatDate } from '../../utilities/formatDate';
+import { usePagination } from '../../hooks/usePagination';
 
 type Props = {
   handleEditElement: (record: ElementState) => void;
@@ -18,19 +19,13 @@ function ElementTable({ handleEditElement, handleDelete }: Props) {
   const { value: allElements, isLoading: loading } = useSelector(
     (state: RootState) => state.allElements
   );
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: 1,
-    pageSize: 10,
-  });
+  const { data, pagination, onChange } =
+    usePagination<ElementState>(allElements);
 
   const lookupLabel = (group: string, id: number) =>
     (lookupCache[group as keyof LookupType] as DropdownType[]).find(
       (option) => option.value.toString() === id.toString()
     )?.label || 'not founnd';
-
-  const handleTableChange = (pagination: TablePaginationConfig) => {
-    setPagination(pagination);
-  };
 
   const getItems = (record: ElementState): MenuProps['items'] => {
     return [
@@ -143,13 +138,10 @@ function ElementTable({ handleEditElement, handleDelete }: Props) {
     <Table
       columns={columns}
       sticky
-      dataSource={allElements.slice(
-        (pagination.current! - 1) * pagination.pageSize!,
-        pagination.current! * pagination.pageSize!
-      )}
+      dataSource={data}
       loading={loading}
       pagination={{ ...pagination, total: allElements.length }}
-      onChange={handleTableChange}
+      onChange={onChange}
     />
   );
 }

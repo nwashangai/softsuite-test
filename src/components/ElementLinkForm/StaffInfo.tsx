@@ -6,7 +6,6 @@ import { InputText, DualFormContainer, InputSelect } from '../../styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { updateElementLink } from '../../slices/elementLinkSlice';
-import eventBus from '../../utilities/eventBus';
 
 type Props = {
   FormItem: typeof Form.Item;
@@ -29,7 +28,6 @@ function StaffInfo({ FormItem, form }: Props) {
   );
 
   const updateDepartment = (suborganizationId: string) => {
-    form.resetFields(['departmentId']);
     dispatch(updateElementLink({ departmentId: undefined, suborganizationId }));
 
     setDepartments(
@@ -41,8 +39,30 @@ function StaffInfo({ FormItem, form }: Props) {
   };
 
   useEffect(() => {
-    eventBus.on('change-suborganization', updateDepartment);
+    if (
+      !elementLink.jobTitleId ||
+      !elementLink.locationId ||
+      !elementLink.employeeTypeId
+    ) {
+      const jobTitleId = lookup.lookups.find(
+        (item) => item.name === 'Job Title'
+      )?.id;
+      const locationId = lookup.lookups.find(
+        (item) => item.name === 'Location'
+      )?.id;
+      const employeeTypeId = lookup.lookups.find(
+        (item) => item.name === 'Employee Type'
+      )?.id;
+
+      dispatch(updateElementLink({ jobTitleId, locationId, employeeTypeId }));
+    }
   }, []);
+
+  useEffect(() => {
+    if (!elementLink.departmentId) {
+      form.resetFields(['departmentId']);
+    }
+  }, [elementLink.departmentId]);
 
   return (
     <ElementLinkFormWrapper>
@@ -70,14 +90,18 @@ function StaffInfo({ FormItem, form }: Props) {
           <InputSelect
             placeholder="Select a Suborganization"
             options={lookup.subOrginazationValues}
-            onChange={(value) => eventBus.emit('change-suborganization', value)}
+            onChange={(value) => updateDepartment(value as string)}
           />
         </FormItem>
 
         <FormItem
           label="Department"
           name="departmentId"
-          initialValue={elementLink.departmentId?.toString()}
+          initialValue={
+            departments.find(
+              (item) => item.value === elementLink.departmentId?.toString()
+            )?.value
+          }
           wrapperCol={{ span: 24, offset: 0 }}
         >
           <InputSelect
