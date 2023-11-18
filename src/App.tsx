@@ -17,7 +17,7 @@ function App() {
     <StyledContainer>
       <h1>Hello, Welcome and thank you for Visiting!</h1>
       <p>Use the button below or sidebar to navigate to the element page</p>
-      <Button onClick={handleRedirect}>Primary Button</Button>
+      <Button onClick={handleRedirect}>Go to Element page</Button>
     </StyledContainer>
   );
 }
