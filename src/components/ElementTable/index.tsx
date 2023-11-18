@@ -8,6 +8,7 @@ import { EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import { DropdownType, ElementState, LookupType } from '../../slices/types';
 import { formatDate } from '../../utilities/formatDate';
 import { usePagination } from '../../hooks/usePagination';
+import { Link } from 'react-router-dom';
 
 type Props = {
   handleEditElement: (record: ElementState) => void;
@@ -34,11 +35,11 @@ function ElementTable({ handleEditElement, handleDelete }: Props) {
         label: (
           <ActionItems>
             <EyeOutlined />
-            <a
-              href={`/payrole-management/element-setup/element/${record.id}/link`}
+            <Link
+              to={`/payrole-management/element-setup/element/${record.id}/link`}
             >
               View Element Links
-            </a>
+            </Link>
           </ActionItems>
         ),
       },
