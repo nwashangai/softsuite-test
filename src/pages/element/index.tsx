@@ -14,7 +14,11 @@ import {
   fetchAllDataAsync,
   toggleLoading,
 } from '../../slices/allElementsSlice';
-import { editElement, resetElement } from '../../slices/elementSlice';
+import {
+  editElement,
+  resetElement,
+  createMode,
+} from '../../slices/elementSlice';
 import { request } from '../../utilities/request';
 import ElementTable from '../../components/ElementTable';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -42,6 +46,11 @@ function Element() {
 
   const handleEditElement = (element: ElementState) => {
     dispatch(editElement(element));
+    toggleModal(true);
+  };
+
+  const handleCreate = () => {
+    dispatch(createMode());
     toggleModal(true);
   };
 
@@ -90,7 +99,7 @@ function Element() {
     <>
       <ElementContainer>
         <Title level={3}>Element</Title>
-        <Tableheader buttonText="Create Element" toggleModal={toggleModal} />
+        <Tableheader buttonText="Create Element" toggleModal={handleCreate} />
         <ElementTable
           handleEditElement={handleEditElement}
           handleDelete={setDeleteId}

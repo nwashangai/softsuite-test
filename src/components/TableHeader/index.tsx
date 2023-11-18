@@ -4,21 +4,13 @@ import { HeaderWrapper, SearchWrapper, Image } from './styles';
 import Search from '../Search';
 import Button from '../Button';
 import { Space } from 'antd';
-import { useDispatch } from 'react-redux';
-import { createMode } from '../../slices/elementSlice';
 
 type Props = {
-  toggleModal: (isVisible: boolean) => void;
+  toggleModal: () => void;
   buttonText: string;
 };
 
 function Tableheader({ toggleModal, buttonText }: Props) {
-  const dispatch = useDispatch();
-  const handleCreateNewElement = () => {
-    dispatch(createMode());
-    toggleModal(true);
-  };
-
   return (
     <HeaderWrapper>
       <SearchWrapper>
@@ -29,7 +21,7 @@ function Tableheader({ toggleModal, buttonText }: Props) {
         />
         <Image src="/img/filter.svg" alt="filter" />
       </SearchWrapper>
-      <Button onClick={handleCreateNewElement}>
+      <Button onClick={toggleModal}>
         {buttonText}{' '}
         <Space>
           <PlusOutlined />

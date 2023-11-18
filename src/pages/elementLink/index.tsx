@@ -21,6 +21,7 @@ import {
   editElementLink,
   resetElementLink,
   toggleLoading,
+  createMode,
 } from '../../slices/elementLinkSlice';
 import { request } from '../../utilities/request';
 import ElementLinkDetals from '../../components/ElementLinkDetails';
@@ -73,6 +74,11 @@ function Element() {
     toggleModal(true);
   };
 
+  const handleCreate = () => {
+    dispatch(createMode());
+    toggleModal(true);
+  };
+
   const handleDelete = (id: string) => {
     dispatch(toggleLoading(true));
     request(
@@ -119,7 +125,7 @@ function Element() {
         <Title level={3}>Element Links</Title>
         <Tableheader
           buttonText="Create Element Link"
-          toggleModal={toggleModal}
+          toggleModal={handleCreate}
         />
         <ElementLinksTable
           handleEditElementLink={handleEditElementLink}

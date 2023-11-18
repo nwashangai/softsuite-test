@@ -71,7 +71,13 @@ function AdditionalInfo({ FormItem, form }: Props) {
           initialValue={elementLink.gradeStep?.toString()}
           wrapperCol={{ span: 24, offset: 0 }}
         >
-          <InputSelect placeholder="Select a Grade Step" options={gradeSteps} />
+          <InputSelect
+            placeholder="Select a Grade Step"
+            options={gradeSteps}
+            onChange={(gradeStep: string) =>
+              dispatch(updateElementLink({ gradeStep }))
+            }
+          />
         </FormItem>
       </DualFormContainer>
       <FormItem
